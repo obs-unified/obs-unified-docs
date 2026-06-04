@@ -73,7 +73,7 @@ Both Grafana edits moved a competitor *up* — we had understated it. We log the
 
 ## Comparison criteria
 
-The ten capability axes used in the landing-page table:
+The eleven capability axes used in the landing-page table:
 
 1. **Hosting model** — can you run the vendor's backend in your own infrastructure, or only consume it as SaaS?
 2. **Pricing model** — what dimension is the bill metered on (host, GB, event, session, user)?
@@ -84,13 +84,18 @@ The ten capability axes used in the landing-page table:
 7. **Product analytics** — funnels, retention, cohorts, journey analysis over user-behavior events.
 8. **Alerting** — alert rule types and primary signals the rules can fire on.
 9. **Cross-signal correlation** — vendor's stated mechanism for pivoting between signal types.
-10. **Data ownership** — where customer telemetry physically lives, and what residency / self-host options exist.
+10. **Agent-readable evidence** — whether the product exposes compact, machine-readable investigation evidence that agents can cite and expand.
+11. **Data ownership** — where customer telemetry physically lives, and what residency / self-host options exist.
 
 ---
 
 ## obs-unified
 
 Self-hosted on Cloudflare Workers + D1 + R2 (or Node + Postgres + S3 via the [storage interface](https://github.com/obs-unified/obs-unified/blob/main/rfcs/0008-storage-interface.md)). Ships traces, logs, metrics, session replay (rrweb), AI/LLM observability, product analytics, alerts, profiles, Agent Action Graphs, and an MCP server in one stack with one telemetry graph agents can traverse from user action to backend trace, logs, replay, AI cost, MCP tool context, and CPU profile. The [Connected Rail](/docs/what-to-expect#the-connected-rail) is the human-facing version of that graph; the [MCP server](/docs/mcp-server) is the agent-facing version. Free; you pay your own infra bill.
+
+### Agent-readable evidence <a id="src-ou-agent-readable-evidence" />
+
+obs-unified exposes `EvidenceReference` objects and evidence retrieval refs so agents can start with compact, cited context and expand raw logs, traces, profiles, replays, AI calls, or tool payloads only when needed. The public MCP server includes `get_evidence_bundle`, `retrieve_evidence_ref`, `search_evidence_ref`, and `get_evidence_stats`; the docs page for [Evidence retrieval](/docs/evidence-retrieval) describes the shipped CCR flow and benchmark.
 
 The rest of this page is the third-party comparison.
 
