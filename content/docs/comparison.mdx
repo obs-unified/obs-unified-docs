@@ -1,6 +1,6 @@
 ---
 title: How obs-unified compares
-description: Vendor comparison with citations to Datadog, Sentry, PostHog, Honeycomb, New Relic, Grafana Cloud, SigNoz, Uptrace, and HyperDX.
+description: Vendor comparison with citations to Datadog, Sentry, PostHog, Honeycomb, New Relic, Grafana Cloud, SigNoz, Uptrace, HyperDX, and Groundcover.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -19,17 +19,17 @@ A long-form companion to the comparison table on [obsunified.com](https://obsuni
 
 ## Scope
 
-We compared **nine third-party tools** along **ten capability axes**:
+We compared **ten third-party tools** along **seventeen capability axes**:
 
-- **In scope:** Datadog, Sentry, PostHog, Honeycomb, New Relic, Grafana Cloud (LGTM stack), SigNoz, Uptrace, HyperDX.
-- **Capability axes:** hosting model, pricing model, distributed traces / APM, structured logs, AI / LLM observability, session replay, product analytics, alerting, cross-signal correlation, data ownership.
+- **In scope:** Datadog, Sentry, PostHog, Honeycomb, New Relic, Grafana Cloud (LGTM stack), SigNoz, Uptrace, HyperDX, Groundcover.
+- **Capability axes:** hosting model, pricing model, distributed traces / APM, structured logs, metrics / infrastructure monitoring, continuous profiling, RUM / frontend monitoring, error tracking, synthetics / uptime, eBPF / Kubernetes auto-instrumentation, AI / LLM observability, session replay, product analytics, alerting, cross-signal correlation, agent-readable evidence, data ownership.
 - **Out of scope:** infrastructure-only tools (Prometheus, Zabbix, Nagios), incident-response platforms (PagerDuty, Opsgenie), single-signal frontend tools (LogRocket, FullStory, Highlight), legacy enterprise-only suites (Splunk Observability Cloud, Dynatrace, AppDynamics, Elastic Observability). These are interesting but cover only a slice of what obs-unified covers, and including them would inflate the "—" column count without adding signal.
 
 We deliberately excluded **performance benchmarks** (ingest throughput, query latency, agent overhead) — those depend so heavily on deployment shape that any cross-vendor number would be misleading.
 
 ## Methodology
 
-1. For each vendor, the lead capabilities page or pricing page on the vendor's own domain was fetched (docs.datadoghq.com, sentry.io, posthog.com, honeycomb.io, docs.newrelic.com, grafana.com, signoz.io, uptrace.dev, hyperdx.io / clickhouse.com).
+1. For each vendor, the lead capabilities page or pricing page on the vendor's own domain was fetched (docs.datadoghq.com, sentry.io, posthog.com, honeycomb.io, docs.newrelic.com, grafana.com, signoz.io, uptrace.dev, hyperdx.io / clickhouse.com, groundcover.com / docs.groundcover.com).
 2. A factual claim was extracted with a quoted phrase that supports it.
 3. Each claim got an anchor id (e.g. `src-dd-pricing`) that the landing-page table footnotes into.
 4. Negative claims ("vendor does not have X") are flagged when the evidence is absence-of-marketing-page rather than an explicit denial — see vendor sections for which negatives are inferential.
@@ -63,29 +63,36 @@ Both Grafana edits moved a competitor *up* — we had understated it. We log the
 
 ## TL;DR
 
-> The nine vendors split into three clusters:
+> The ten vendors split into four clusters:
 >
 > - **SaaS-only full-stack** (Datadog, New Relic) — comprehensive coverage, opaque cost model, no data-residency option beyond region choice.
 > - **Single-signal-led** (Sentry on errors, PostHog on product analytics, Honeycomb on traces, Uptrace on traces) — strong in one area, partial elsewhere, all now growing into adjacent signals (Sentry has logs + AI agents; PostHog has logs + LLM analytics; Honeycomb has agent observability EA).
 > - **OSS-first OTel-native** (Grafana, SigNoz, Uptrace, HyperDX) — self-host friendly, OTLP-native; HyperDX ships session replay, and Grafana Cloud added it via Frontend Observability in 2026. Product analytics is absent across all four.
+> - **Kubernetes/BYOC-native** (Groundcover) — strongest on eBPF auto-instrumentation, Kubernetes visibility, and data-in-your-cloud deployment, less positioned around product analytics or agent-readable evidence.
 >
 > obs-unified sits in the **OSS-first** cluster, and is the only tool in the whole comparison that ships **session replay (rrweb), LLM observability, *and* product analytics** alongside traces/logs/metrics — i.e. the only tool here that doesn't force you to bolt on PostHog or LogRocket on the side.
 
 ## Comparison criteria
 
-The eleven capability axes used in the landing-page table:
+The seventeen capability axes used in the landing-page table:
 
 1. **Hosting model** — can you run the vendor's backend in your own infrastructure, or only consume it as SaaS?
 2. **Pricing model** — what dimension is the bill metered on (host, GB, event, session, user)?
 3. **Traces / APM** — distributed tracing, with attention to whether OTLP is a first-class ingest path or a translation layer.
 4. **Structured logs** — log ingestion, parsing, search, and explicit trace correlation.
-5. **AI / LLM observability** — tracing of prompts/responses/tools/cost/eval for LLM-backed applications, as a vendor-shipped product (not a community plug-in).
-6. **Session replay** — DOM-level recording of browser sessions (typically rrweb-based).
-7. **Product analytics** — funnels, retention, cohorts, journey analysis over user-behavior events.
-8. **Alerting** — alert rule types and primary signals the rules can fire on.
-9. **Cross-signal correlation** — vendor's stated mechanism for pivoting between signal types.
-10. **Agent-readable evidence** — whether the product exposes compact, machine-readable investigation evidence that agents can cite and expand.
-11. **Data ownership** — where customer telemetry physically lives, and what residency / self-host options exist.
+5. **Metrics / infrastructure monitoring** — host, container, Kubernetes, cloud, custom, or Prometheus-style metrics.
+6. **Continuous profiling** — CPU, wall-clock, memory, or runtime profiling as a first-party surface.
+7. **RUM / frontend monitoring** — browser or mobile performance, client errors, web vitals, and frontend request correlation.
+8. **Error tracking** — issue grouping, exception inboxes, stack traces, and error triage workflows.
+9. **Synthetics / uptime** — browser/API checks, uptime monitors, or synthetic transaction monitoring.
+10. **eBPF / Kubernetes auto-instrumentation** — kernel or Kubernetes sensor-based telemetry without per-service SDK work.
+11. **AI / LLM observability** — tracing of prompts/responses/tools/cost/eval for LLM-backed applications, as a vendor-shipped product (not a community plug-in).
+12. **Session replay** — DOM-level recording of browser sessions (typically rrweb-based).
+13. **Product analytics** — funnels, retention, cohorts, journey analysis over user-behavior events.
+14. **Alerting** — alert rule types and primary signals the rules can fire on.
+15. **Cross-signal correlation** — vendor's stated mechanism for pivoting between signal types.
+16. **Agent-readable evidence** — whether the product exposes compact, machine-readable investigation evidence that agents can cite and expand.
+17. **Data ownership** — where customer telemetry physically lives, and what residency / self-host options exist.
 
 ---
 
@@ -756,6 +763,199 @@ The factual table at the top is the answer to "what does each vendor do." This i
 - If you want **OSS, OTel-native, and ClickHouse-shaped pricing** → **SigNoz**, **HyperDX**, or **Uptrace** (mostly differ on UX taste; HyperDX is the only one with session replay; Uptrace is the only one with native OTLP/gRPC; SigNoz has the most alert types).
 - If you want a **fully composable LGTM stack** you can scale independently → **Grafana Cloud** (or self-host the components).
 - If you want **everything-in-one (traces, logs, metrics, replay, LLM, analytics, Agent Action Graphs, and MCP) self-hosted on your infra and built for agentic debugging** → **obs-unified**, with the trade-offs in the next section.
+
+---
+
+## Additional market-coverage anchors
+
+These anchors support rows added to keep the landing-page table honest about competitor-native strengths, not only obs-unified differentiators.
+
+### Datadog continuous profiling <a id="src-dd-profiling" />
+
+Datadog sells Continuous Profiler as a first-party APM-adjacent capability.
+
+- Source: [Continuous Profiler](https://docs.datadoghq.com/profiler/)
+- > *"Continuously profile your code in production."*
+
+### Datadog error tracking <a id="src-dd-errors" />
+
+Datadog has a first-party Error Tracking surface for grouping and triaging errors.
+
+- Source: [Error Tracking](https://docs.datadoghq.com/error_tracking/)
+- > *"Track errors across your applications."*
+
+### Sentry profiling <a id="src-se-profiling" />
+
+Sentry offers profiling alongside its application monitoring and error workflows.
+
+- Source: [Profiling](https://docs.sentry.io/product/profiling/)
+- > *"Sentry's Profiling product helps you find performance bottlenecks."*
+
+### Sentry error tracking <a id="src-se-errors" />
+
+Error monitoring and issue triage are Sentry's core product surface.
+
+- Source: [Error Monitoring](https://sentry.io/for/error-monitoring/)
+- > *"Application error monitoring with complete stack traces."*
+
+### PostHog profiling <a id="src-ph-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — PostHog's product navigation centers analytics, web analytics, replay, feature flags, experiments, surveys, CDP, logs, error tracking, and LLM analytics, but not continuous profiling.
+
+- Source: [PostHog product docs](https://posthog.com/docs)
+
+### PostHog error tracking <a id="src-ph-errors" />
+
+PostHog documents Error Tracking as a product surface.
+
+- Source: [Error tracking](https://posthog.com/docs/error-tracking)
+- > *"Error tracking helps you identify, prioritize, and resolve errors in your application."*
+
+### Honeycomb profiling <a id="src-hc-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — Honeycomb's platform docs emphasize events, traces, logs, SLOs, querying, frontend observability, and agent observability, but not continuous profiling.
+
+- Source: [Honeycomb docs](https://docs.honeycomb.io/)
+
+### New Relic profiling <a id="src-nr-profiling" />
+
+New Relic documents profiling within APM.
+
+- Source: [New Relic APM thread profiler](https://docs.newrelic.com/docs/apm/applications-menu/events/thread-profiler-tool/)
+- > *"The thread profiler identifies bottlenecks in your application's code."*
+
+### New Relic error tracking <a id="src-nr-errors" />
+
+New Relic has Errors Inbox for grouping and triaging errors.
+
+- Source: [Errors inbox](https://docs.newrelic.com/docs/errors-inbox/errors-inbox/)
+- > *"Errors inbox gives you a single place to proactively detect, triage, and take action on all errors."*
+
+### New Relic synthetics <a id="src-nr-synthetics" />
+
+New Relic sells Synthetic Monitoring as a first-party capability.
+
+- Source: [Synthetic monitoring](https://docs.newrelic.com/docs/synthetics/synthetic-monitoring/getting-started/get-started-synthetic-monitoring/)
+- > *"Synthetic monitoring helps you monitor your websites, critical business transactions, and API endpoints."*
+
+### Grafana profiling <a id="src-gr-profiling" />
+
+Grafana Labs maintains Pyroscope for continuous profiling.
+
+- Source: [Grafana Pyroscope](https://grafana.com/oss/pyroscope/)
+- > *"Continuous profiling platform."*
+
+### Grafana synthetics <a id="src-gr-synthetics" />
+
+Grafana Cloud includes Synthetic Monitoring powered by k6.
+
+- Source: [Synthetic Monitoring](https://grafana.com/docs/grafana-cloud/testing/synthetic-monitoring/)
+- > *"Synthetic Monitoring is a blackbox monitoring solution provided as part of Grafana Cloud."*
+
+### SigNoz profiling <a id="src-sn-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — SigNoz's public product and docs pages cover APM, logs, metrics, traces, dashboards, exceptions, alerts, and LLM observability, but not continuous profiling.
+
+- Source: [SigNoz docs](https://signoz.io/docs/)
+
+### SigNoz errors <a id="src-sn-errors" />
+
+SigNoz exposes exception/error views through APM and traces rather than a Sentry-style issue inbox.
+
+- Source: [SigNoz Exceptions](https://signoz.io/docs/userguide/exceptions/)
+- > *"Exceptions tab gives you a consolidated view of all exceptions."*
+
+### Uptrace profiling <a id="src-up-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — Uptrace positions around OpenTelemetry traces, metrics, logs, dashboards, alerts, and uptime monitoring, but not continuous profiling.
+
+- Source: [Uptrace docs](https://uptrace.dev/get/)
+
+### HyperDX profiling <a id="src-hx-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — HyperDX/ClickStack positions around logs, traces, metrics, session replay, dashboards, and alerts, but not continuous profiling.
+
+- Source: [HyperDX docs](https://www.hyperdx.io/docs)
+
+### Groundcover hosting and data ownership <a id="src-gc-hosting" />
+
+Groundcover's BYOC architecture keeps telemetry data in the customer's environment; it also offers fully on-prem deployment.
+
+- Source: [Groundcover architecture overview](https://docs.groundcover.com/architecture/overview)
+- > *"all of your observability data ... remain within the four walls of your infrastructure."*
+- Source: [Groundcover pricing](https://www.groundcover.com/pricing)
+- > *"Bring Your Own Cloud (BYOC)"* and *"Fully On-Prem."*
+
+### Groundcover pricing <a id="src-gc-pricing" />
+
+Groundcover pricing is host/node based rather than ingestion based.
+
+- Source: [Groundcover pricing](https://www.groundcover.com/pricing)
+- > *"based on hosts, not data."*
+
+### Groundcover APM and traces <a id="src-gc-apm" />
+
+Groundcover positions APM around eBPF-based collection with zero code changes.
+
+- Source: [Application Performance Monitoring](https://docs.groundcover.com/capabilities/application-performance-monitoring-apm)
+- > *"100% coverage into application metrics and traces with zero code changes."*
+
+### Groundcover logs <a id="src-gc-logs" />
+
+Groundcover includes log management and correlates logs with traces and metrics.
+
+- Source: [Groundcover docs introduction](https://docs.groundcover.com/)
+- > *"consolidates all your traces, metrics, logs, and Kubernetes events."*
+
+### Groundcover metrics <a id="src-gc-metrics" />
+
+Groundcover documents Kubernetes infrastructure metrics, custom metrics, and service-level labels.
+
+- Source: [Metrics & Labels](https://docs.groundcover.com/use-groundcover/metrics-and-labels)
+- > *"Kubernetes Infrastructure Metrics & Labels."*
+
+### Groundcover profiling <a id="src-gc-profiling" />
+
+Not offered as a first-party product. **Inferential negative** — Groundcover's capability docs cover log management, infrastructure monitoring, APM, and RUM, but not continuous profiling.
+
+- Source: [Groundcover docs introduction](https://docs.groundcover.com/)
+
+### Groundcover RUM, replay, and frontend errors <a id="src-gc-rum" />
+
+Groundcover RUM includes browser telemetry, web vitals, exceptions, custom events, and session recording, and is BYOC-only.
+
+- Source: [Real User Monitoring](https://docs.groundcover.com/capabilities/real-user-monitoring-rum)
+- > *"captures every interaction, page load, and performance metric"* and *"supports the recording of the user session."*
+
+### Groundcover alerts <a id="src-gc-alerts" />
+
+Groundcover alerts are implemented through an integrated Grafana alerting interface over metrics, traces, logs, or Kubernetes events.
+
+- Source: [Create a Grafana alert](https://docs.groundcover.com/use-groundcover/monitors/embedded-grafana-alerts/create-an-alert)
+- > *"Alerts in groundcover leverage a fully integrated Grafana interface."*
+
+### Groundcover eBPF and Kubernetes auto-instrumentation <a id="src-gc-ebpf" />
+
+Groundcover's differentiator is its eBPF sensor for Kubernetes workloads.
+
+- Source: [Application Performance Monitoring](https://docs.groundcover.com/capabilities/application-performance-monitoring-apm)
+- > *"Flora, is deployed as a DaemonSet in your Kubernetes cluster."*
+- > *"zero code changes or configurations."*
+
+### Groundcover AI / LLM observability <a id="src-gc-llm" />
+
+Not positioned as a first-party LLM observability product. **Inferential negative** — Groundcover's public capability docs list log management, infrastructure monitoring, APM, and RUM; the comparison does not treat generic traces/logs as an LLM observability product.
+
+- Source: [Groundcover docs introduction](https://docs.groundcover.com/)
+
+### Groundcover cross-signal correlation <a id="src-gc-correlation" />
+
+Groundcover correlates traces, metrics, logs, Kubernetes events, and RUM in one platform, especially around Kubernetes metadata and frontend-to-backend flows.
+
+- Source: [Groundcover docs introduction](https://docs.groundcover.com/)
+- > *"traces, metrics, logs, and Kubernetes events into a single pane of glass."*
+- Source: [Real User Monitoring](https://docs.groundcover.com/capabilities/real-user-monitoring-rum)
+- > *"seamlessly tie front-end events to backend traces and logs."*
 
 ---
 
