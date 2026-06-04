@@ -205,12 +205,39 @@ async function checkShippedFeaturesInDocs() {
 	}
 }
 
+// ---------------------------------------------------------------------------
+// CHECK 7 — comparison row source anchors
+// ---------------------------------------------------------------------------
+async function checkComparisonAnchors() {
+	const path = join(docsRoot, "comparison.mdx");
+	const text = await readText(path);
+	const axes = manifest.authored?.positioning?.comparison?.axes ?? [];
+	const refs = new Set();
+
+	for (const axis of axes) {
+		for (const cell of Object.values(axis.cells ?? {})) {
+			if (cell?.ref) refs.add(cell.ref);
+		}
+		if (axis.docsAnchor) refs.add(axis.docsAnchor);
+	}
+
+	const missing = [...refs].filter((ref) => !text.includes(`id="src-${ref}"`));
+	if (missing.length === 0) {
+		console.log(`✓ CHECK 7 (comparison anchors): all ${refs.size} manifest refs exist in comparison.mdx`);
+		return;
+	}
+	fail(
+		`CHECK 7 (comparison anchors): missing src-* anchors in comparison.mdx: ${missing.join(", ")}`,
+	);
+}
+
 await checkMcpTools();
 await checkPackageScopes();
 await checkEvidenceReferenceFields();
 await checkDevIngestKey();
 await checkDoctorCommand();
 await checkShippedFeaturesInDocs();
+await checkComparisonAnchors();
 
 if (failures.length > 0) {
 	console.error("");
